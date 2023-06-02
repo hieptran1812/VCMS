@@ -70,9 +70,8 @@ const defaultSettings = {
   breadcrumbs: false,
   editUrl: 'https://github.com/dyte-in/docs/tree/main/',
   showLastUpdateTime: true,
-  remarkPlugins: [
-    [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
-  ],
+  remarkPlugins: [math],
+  rehypePlugins: [katex],
   sidebarPath: require.resolve('./sidebars-default.js'),
 };
 
@@ -123,8 +122,6 @@ const config = {
       ({
         docs: {
           path: 'docs/guides',
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
           id: 'guides',
           routeBasePath: '/guides',
           ...defaultSettings,

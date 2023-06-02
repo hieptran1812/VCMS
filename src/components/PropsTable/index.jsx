@@ -17,10 +17,6 @@ const REFERENCE_PROPS = {
     path: '../reference/#dytei18n',
     name: 'DyteI18n',
   },
-  // participant: {
-  //   path: '../reference/participant',
-  //   name: 'Participant',
-  // },
   states: {
     path: '../reference/interfaces/States',
     name: 'States',
@@ -29,25 +25,9 @@ const REFERENCE_PROPS = {
     path: '../reference/interfaces/Notification',
     name: 'Notification',
   },
-  // poll: {
-  //   path: '../reference/poll',
-  //   name: 'Poll',
-  // },
-  plugins: {
-    path: '/web-core/reference/DytePlugin',
-    name: 'DytePlugin[]',
-  },
-  plugin: {
-    path: '/web-core/reference/DytePlugin',
-    name: 'DytePlugin',
-  },
 };
 
 const UI_KIT_TYPE_REFERENCE = {
-  // 'Peer[]': {
-  //   name: 'Participant[]',
-  //   path: '../reference/participant',
-  // },
 };
 
 const WEB_CORE_TYPE_REFERENCES = {

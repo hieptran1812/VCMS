@@ -3,9 +3,12 @@ sidebar_position: 2
 slug: Real-time Scene Text Detection with Differentiable Binarization
 title: Real-time Scene Text Detection with Differentiable Binarization
 tags: [paper-reading]
+charset: 'UTF-8'
 ---
 
-# Động lực và đóng góp
+# Real-time Scene Text Detection with Differentiable Binarization
+
+## Động lực và đóng góp
 
 Bài toán text detection luôn nhận được quan tâm nghiên cứu do tính ứng dụng thực tiễn của chúng. Mục tiêu là ta sẽ tìm vị trí của text trong văn bản hoặc video. Gần giống với bài toán object detection, ta có thể coi text trong ảnh là một loại 'object', do đó các phương pháp object detection cũng phù hợp với bài text detection. Tuy nhiên, các bài toán text detection thường có một số điểm khó khăn hơn object detection như sau:
 
@@ -26,7 +29,7 @@ Trong bài báo, nhóm tác giả giới thiệu DBNet với mục tiêu tối �
 
 Bài báo đề xuất một learnable threshold và một binarization function để đảm bảo rằng mạng segmentation học được threshold một cách liên tục trong quá trình đào tạo. Việc điều chỉnh tự động threshold không chỉ cải thiện độ chính xác, mà còn đơn giản hóa quá trình post processing và cải thiện hiệu suất của việc phát hiện văn bản.
 
-# Phương pháp
+## Phương pháp
 
 ![image.png](https://images.viblo.asia/f664361b-fb55-4757-8054-3c0fc34ce231.png)
 
@@ -36,9 +39,9 @@ Kiến trúc bài báo đề xuất được thể hiện trong hình trên. Qu�
 - Tiếp theo, các pyramid feature được up-sample để cùng kích thước và concat lại cho ra feature $F$.
 - Sau đó, feature $F$ được sử dụng để dự đoán probability map ($P$) và threshold map ($T$). Cuối cùng, approximate binary map ($\hat{B}$) (dùng để dự đoán vị trí text trong ảnh) sẽ được tính bởi $P$ và $F$.
 
-## Binarization
+### Binarization
 
-### Standard binarization
+#### Standard binarization
 
 Phương pháp Standard binarization nhận đầu vào là probabilty map $P \in R^{H \times W}$ được tạo ra từ mạng segmentation, trong đó $H$ và $W$ là chiều cao và chiều rộng của map. Ta cần chuyển probability map sang binary map $P \in R^{H \times W}$ trong đó pixel có giá trị 1 là vùng chứa text. Thường thì quá trình binarization được mô tả như sau:
 
@@ -78,11 +81,11 @@ $$
 
 Nhờ có tham số $k$ mà ta có thể tối ưu dự đoán, phân biệt được rõ ràng hơn vùng chứa text và background.
 
-## Adaptive threshold
+### Adaptive threshold
 
 ![image.png](https://images.viblo.asia/a7d62104-2329-4a34-b0e8-983e2e6e1130.png)
 
-## Deformable convolution
+### Deformable convolution
 
 Deformable convolution được sử dụng do có thể cung cấp receptive field linh hoạt cho model, điều này đặc biệt hữu ích cho các ảnh text có aspect ratio lớn.
 
@@ -90,7 +93,7 @@ Cho những bạn nào chưa biết thì Deformable convolution (tạm dịch l�
 
 Trong phép convolution truyền thống, các điểm lấy mẫu được chọn cố định và không thay đổi trong quá trình tính toán. Tuy nhiên, trong deformable convolution, các điểm lấy mẫu được điều chỉnh dựa trên một số thông tin cụ thể từ dữ liệu đầu vào. Điều này cho phép mô hình "thay đổi hình dạng" của phép tích chập để tìm hiểu các biến thể không gian phức tạp hơn, chẳng hạn như đối tượng có dạng cong, biến dạng trong ảnh.
 
-## Optimzation
+### Optimzation
 
 Hàm loss cho model là tổng có trọng số của 3 hàm loss cho probability map $L_s$, binary map $L_b$ và threshold map $L_t$:
 
@@ -110,7 +113,7 @@ $$L_t=\sum_{i \in R_d}\left|y_i^*-x_i^*\right|$$
 
 Trong đó $R_d$ là tập hợp các điểm bên trong vùng text, $y^*_i$ là label cho threshold map.
 
-# Thực nghiệm
+## Thực nghiệm
 
 Một số kết quả của mô hình trong nhiều trường hợp văn bản có hướng, kích thước, hình dạng khác nhau. Phía phải trên là threshold map và dưới là probability map.
 
@@ -120,7 +123,7 @@ Kết quả dự đoán với các setting khác nhau trên 2 bộ dataset MSRA-
 
 ![image.png](https://images.viblo.asia/601db22b-1e63-4675-a184-9df428b1b6bf.png)
 
-# Kết luận
+## Kết luận
 
 Bài báo cung cấp cho chúng ta thêm một hướng mới để xử lý các bài toán phát hiện ảnh văn bản trong nhiều môi trường khác nhau. Tuy mang nhiều ưu điểm như nhanh (có thể sử dụng các mạng backbone nhẹ) mà vẫn đảm bảo độ chính xác nhưng model trong bài báo cũng mang một số nhược điểm là không thể xử lý trường hợp "text trong text" :D Tùy vào data thực tế cần infer mà ta có thể chọn các phương pháp phù hợp.
 

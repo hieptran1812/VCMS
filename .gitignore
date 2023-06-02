@@ -4,6 +4,8 @@
 # Production
 /build
 .env
+.vscode
+.firebase
 
 # Generated files
 .docusaurus
