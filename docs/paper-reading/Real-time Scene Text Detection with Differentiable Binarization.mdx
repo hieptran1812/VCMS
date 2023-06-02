@@ -1,0 +1,131 @@
+---
+sidebar_position: 2
+slug: Real-time Scene Text Detection with Differentiable Binarization
+title: Real-time Scene Text Detection with Differentiable Binarization
+tags: [paper-reading]
+---
+
+# Động lực và đóng góp
+
+Bài toán text detection luôn nhận được quan tâm nghiên cứu do tính ứng dụng thực tiễn của chúng. Mục tiêu là ta sẽ tìm vị trí của text trong văn bản hoặc video. Gần giống với bài toán object detection, ta có thể coi text trong ảnh là một loại 'object', do đó các phương pháp object detection cũng phù hợp với bài text detection. Tuy nhiên, các bài toán text detection thường có một số điểm khó khăn hơn object detection như sau:
+
+- Với các text là scene text (scene text là thuật ngữ được sử dụng để chỉ văn bản xuất hiện trong cảnh quan hình ảnh, chẳng hạn như các biển quảng cáo, bảng chỉ dẫn đường, băng rôn, bìa sách hoặc bất kỳ văn bản nào xuất hiện trong các hình ảnh chụp từ môi trường thực tế) thường mang lại nhiều thách thức cho việc nhận dạng và xử lý do các yếu tố như nhiễu, độ sáng, góc độ, kích thước và kiểu chữ có thể thay đổi đáng kể.
+- Các text có thể bị chồng chéo lên nhau
+- Khó xác định các đoạn text nào là rời rạc hay liên kết với nhau
+
+Hiện tại có nhiều phương pháp để giải quyết bài toán này, ta có chia theo 2 phương pháp:
+
+- Phương pháp Regression-based
+- Phương pháp Segmentation-based
+
+Các phương pháp Segmentation-based thường được lựa chọn hơn do có thể đáp ứng được việc nhận diện được các văn bản có những hình dạng, kích thước khác nhau.
+
+Trong bài báo, nhóm tác giả giới thiệu DBNet với mục tiêu tối ưu thời gian trong quá trình post processing trong các phương pháp segmentation-based mà yêu cầu sử dụng threshold để thực hiện nhị phân hóa (binarization), tức là để phân biệt điểm ảnh nào là background, điểm ảnh nào của text từ bản đồ xác suất (probability map).
+
+![image.png](https://images.viblo.asia/56126780-77a0-4cf6-abdc-105e4a5f2835.png)
+
+Bài báo đề xuất một learnable threshold và một binarization function để đảm bảo rằng mạng segmentation học được threshold một cách liên tục trong quá trình đào tạo. Việc điều chỉnh tự động threshold không chỉ cải thiện độ chính xác, mà còn đơn giản hóa quá trình post processing và cải thiện hiệu suất của việc phát hiện văn bản.
+
+# Phương pháp
+
+![image.png](https://images.viblo.asia/f664361b-fb55-4757-8054-3c0fc34ce231.png)
+
+Kiến trúc bài báo đề xuất được thể hiện trong hình trên. Quá trình thực hiện của mô hình được diễn ra như sau:
+
+- Đầu tiên, ảnh input sẽ được đưa vào một mạng feature-pyramid backbone.
+- Tiếp theo, các pyramid feature được up-sample để cùng kích thước và concat lại cho ra feature $F$.
+- Sau đó, feature $F$ được sử dụng để dự đoán probability map ($P$) và threshold map ($T$). Cuối cùng, approximate binary map ($\hat{B}$) (dùng để dự đoán vị trí text trong ảnh) sẽ được tính bởi $P$ và $F$.
+
+## Binarization
+
+### Standard binarization
+
+Phương pháp Standard binarization nhận đầu vào là probabilty map $P \in R^{H \times W}$ được tạo ra từ mạng segmentation, trong đó $H$ và $W$ là chiều cao và chiều rộng của map. Ta cần chuyển probability map sang binary map $P \in R^{H \times W}$ trong đó pixel có giá trị 1 là vùng chứa text. Thường thì quá trình binarization được mô tả như sau:
+
+$$B_{i, j}= \begin{cases}1 & \text { if } P_{i, j}>=t \\ 0 & \text { otherwise. }\end{cases}$$
+
+với $t$ là một giá trị threshold cố định được định nghĩa trước và $(i, j)$ là tọa độ điểm trong map.
+
+### Differentiable binarization
+
+Với Standard binarization có một nhược điểm là khó tìm ra được một giá trị $t$ hợp lý. Để giải quyết vấn đề này, nhóm tác giả đề xuất phương pháp Differentiable binarization và có thể tính toán đạo hàm, do đó tích hợp được vào quá trình training.
+
+$$\hat{B}_{i, j}=\frac{1}{1+e^{-k\left(P_{i, j}-T_{i, j}\right)}}$$
+
+Trong đó $\hat{B}$ là approximate binary map; $T$ là adaptive threshold map được học từ mô hình; $k$ là chỉ số khuếch đại, thường được đặt là 50. Phương pháp này kết hợp sử dụng adaptive threshold không chỉ giúp phát hiện text so với background mà còn giúp tách các vùng text bị ghép liền vào với nhau.
+
+Lý do DB cải thiện hiệu suất có thể được giải thích bằng quá trình backpropagation. Ta định nghĩa $f(x)=\frac{1}{1+e^{-k x}}$ là một DB function trong đó $x=P_{i,j} - T_{i,j}$. Khi đó loss $l_{+}$ cho nhãn positive và $l_{-}$ cho nhãn negative được biểu diễn như sau:
+
+$$
+\begin{aligned}
+& l_{+}=-\log \frac{1}{1+e^{-k x}} \\
+& l_{-}=-\log \left(1-\frac{1}{1+e^{-k x}}\right)
+\end{aligned}
+$$
+
+Đạo hàm của 2 hàm loss trên được tính sử dụng chain rule và cho kết quả sau đây:
+
+$$
+\begin{aligned}
+& \frac{\partial l_{+}}{\partial x}=-k f(x) e^{-k x} \\
+& \frac{\partial l_{-}}{\partial x}=k f(x)
+\end{aligned}
+$$
+
+Đồ thị hàm số loss và đạo hàm được mô tả trong hình dưới
+
+![image.png](https://images.viblo.asia/10e32afa-3d4a-4259-8f83-0c7516d502a6.png)
+
+Nhờ có tham số $k$ mà ta có thể tối ưu dự đoán, phân biệt được rõ ràng hơn vùng chứa text và background.
+
+## Adaptive threshold
+
+![image.png](https://images.viblo.asia/a7d62104-2329-4a34-b0e8-983e2e6e1130.png)
+
+## Deformable convolution
+
+Deformable convolution được sử dụng do có thể cung cấp receptive field linh hoạt cho model, điều này đặc biệt hữu ích cho các ảnh text có aspect ratio lớn.
+
+Cho những bạn nào chưa biết thì Deformable convolution (tạm dịch là tích chập có khả năng biến đổi) là một phương pháp cải tiến của phép convolution truyền thống trong mạng nơ-ron tích chập (Convolutional Neural Networks - CNNs). Nó được giới thiệu để mở rộng khả năng biểu diễn không gian của phép tích chập thông qua việc điều chỉnh vị trí của các điểm lấy mẫu trong quá trình tích chập.
+
+Trong phép convolution truyền thống, các điểm lấy mẫu được chọn cố định và không thay đổi trong quá trình tính toán. Tuy nhiên, trong deformable convolution, các điểm lấy mẫu được điều chỉnh dựa trên một số thông tin cụ thể từ dữ liệu đầu vào. Điều này cho phép mô hình "thay đổi hình dạng" của phép tích chập để tìm hiểu các biến thể không gian phức tạp hơn, chẳng hạn như đối tượng có dạng cong, biến dạng trong ảnh.
+
+## Optimzation
+
+Hàm loss cho model là tổng có trọng số của 3 hàm loss cho probability map $L_s$, binary map $L_b$ và threshold map $L_t$:
+
+$$L=L_s+\alpha \times L_b+\beta \times L_t$$
+
+Giá trị $\alpha$ được đặt là 1.0 và $\beta$ là 10.
+
+Nhóm tác giả sử dụng Binary cross-entropy (BCE) loss cho $L_s$ và $L_b$. Để giải quyết vấn đề mất cân bằng giữa điểm ảnh postive và negative (do số lượng các điểm ảnh không phải chữ thường chiếm rất nhiều trong một ảnh), nhóm tác giả sử dụng hard negative mining trong BCE loss bằng cách lấy các mẫu hard negative (tức là lấy các mẫu mà có phần negative mà model khó nhận diện :D thay vì lấy tất cả các mẫu negative).
+
+$$L_s=L_b=\sum_{i \in S_l} y_i \log x_i+\left(1-y_i\right) \log \left(1-x_i\right)$$
+
+Trong đó $S_l$ là tập lấy mẫu có tỉ lệ positive và negative là 1 : 3.
+
+$L_t$ được tính là tổng khoảng cách $L1$ giữa dự đoán và label
+
+$$L_t=\sum_{i \in R_d}\left|y_i^*-x_i^*\right|$$
+
+Trong đó $R_d$ là tập hợp các điểm bên trong vùng text, $y^*_i$ là label cho threshold map.
+
+# Thực nghiệm
+
+Một số kết quả của mô hình trong nhiều trường hợp văn bản có hướng, kích thước, hình dạng khác nhau. Phía phải trên là threshold map và dưới là probability map.
+
+![image.png](https://images.viblo.asia/e62256da-54a6-4e64-919b-607f69f4c2ec.png)
+
+Kết quả dự đoán với các setting khác nhau trên 2 bộ dataset MSRA-TD500 và CTW1500. DConv biểu thị sử dụng deformable convolution. P, R, F lần lượt là precision, recall và f-measure.
+
+![image.png](https://images.viblo.asia/601db22b-1e63-4675-a184-9df428b1b6bf.png)
+
+# Kết luận
+
+Bài báo cung cấp cho chúng ta thêm một hướng mới để xử lý các bài toán phát hiện ảnh văn bản trong nhiều môi trường khác nhau. Tuy mang nhiều ưu điểm như nhanh (có thể sử dụng các mạng backbone nhẹ) mà vẫn đảm bảo độ chính xác nhưng model trong bài báo cũng mang một số nhược điểm là không thể xử lý trường hợp "text trong text" :D Tùy vào data thực tế cần infer mà ta có thể chọn các phương pháp phù hợp.
+
+Nếu có bất kì câu hỏi nào liên quan đến bài viết, các bạn hãy để lại comment ở bên dưới nhé. Chúng mình sẽ giải đáp nhanh nhất có thể :D
+
+# Tham khảo
+
+1. [Real-time Scene Text Detection with Differentiable Binarization](https://arxiv.org/pdf/1911.08947.pdf 'paper')

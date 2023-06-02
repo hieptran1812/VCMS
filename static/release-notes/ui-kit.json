@@ -1,0 +1,12 @@
+[
+  {
+    "version": "1.46.0",
+    "createdAt": 1679409000,
+    "fixes": [
+      "The **stop screenshare** feature was not working when multiple users were sharing their screens simultaneously."
+    ],
+    "features": [
+      "Chat in a livestreaming meeting is now paginated to handle hundreds of thousands of messages."
+    ]
+  }
+]

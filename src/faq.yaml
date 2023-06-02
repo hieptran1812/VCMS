@@ -1,0 +1,157 @@
+- question: What does VCMS do?
+  tags: ['General']
+  answer: |-
+    Dyte offers a real-time video and voice solution for integrating
+    high-quality video/voice calls into your web, mobile, and desktop
+    applications and websites.
+
+    Call recording, live streaming, webinars,
+    live transcription and translation, chatting, polling, quizzes, and
+    many other features are available with Dyte.
+
+    Dyte includes:
+
+    **Core SDKs:** These SDKs enable you to create high-quality custom
+    video and voice calls with real-time communication. Core SDKs are
+    completely customizable and simple to integrate.
+
+    **UI Kit:** Using Dyte&quot;s prebuilt design library of UI
+    components, you can integrate video and voice calls into your app or
+    website in minutes.
+
+    The following platforms are currently supported:
+
+    - Mobile: Flutter, Android (Java/Kotlin), iOS(Objective-C/Swift), React Native
+    - Web: Javascript Core SDK + UI Kit for React JS, Angular, Web Components for everything else
+    - Desktop: Electron
+
+    For more information, see [Dyte docs](/)
+
+- question: What businesses can use Dyte?
+  tags: ['General']
+  answer: |-
+    Dyte can add value to a wide range of industries, including telehealth, eLearning, gaming, remote working, education, event management, metaverse, adult entertainment, and others.
+
+- question: What are Presets?
+  tags: ['General']
+  answer: |-
+    A set of roles, UI elements, buttons, and configurations that determines how the meeting will appear for a specific participant. Learn more: [DytePermissionsPreset](/rn-core/reference/DytePermissionsPreset#module_DytePermissionsPreset).
+
+- question: What are Core SDKs used for?
+  tags: ['General']
+  answer: |-
+    The Dyte Core SDKs are designed to provide developers with an easy way to incorporate real-time communication (RTC) solutions into their apps and websites. With full customization and branding options, you can build your own UI from the ground up without dealing with complicated media layers. 
+
+    The Core SDK acts as a data-only layer, offering high-level primitives and abstracting away complex media and networking optimizations. It only provides simple APIs that are user-friendly and easy to work with.
+    See [Dyte docs](/).
+
+- question: What is the UI Kit?
+  tags: ['General']
+  answer: |-
+    Dyte's React UI Kit is a prebuilt design library of UI components that makes it easy to integrate video and voice calls into any app or website within minutes. See [Dyte docs](https://docs.dyte.io/react-ui-kit).
+
+- question: What is the Plugin SDK?
+  tags: ['General']
+  answer: |-
+    You can use Dyte plugin SDKs to add third-party plugins to experience the most immersive, collaborative, and more human interaction right in your video and audio calls. Dyte provides multiple out-of-the-box plugins, for example, YouTube, Miro, WhiteBoard, and so on.
+
+- question: How to access API Keys and other details from the Developer Portal?
+  tags: ['General']
+  answer: |-
+    Log onto [https://dev.dyte.io/apikeys](https://dev.dyte.io/apikeys) with the credentials you used to sign up for Dyte.
+
+- question: How many people can join a Dyte meeting with audio & video turned ON?
+  tags: ['General']
+  answer: |-
+    On Dyte, you can have up to 200 people on the same call with video and voice enabled.
+    However, if you have any specific requirements that require more people joining the same call, please
+    [contact us](https://dyte.io/contact).
+
+    We will support you with your requirements.
+
+- question: How many attendees can be seen on a live grid?'
+  tags: ['General']
+  answer: |-
+    In order to provide the best possible experience, we have limited the number of attendees to 6-9. However, we can tailor it to a maximum of 12 attendees.
+
+- question: How many people can join a Dyte webinar?
+  tags: ['General']
+  answer: |-
+    500 people. One user with the audio-video enabled and everyone else attending
+    the call (aka one host webinar). However, if you have any specific
+    requirements that require more people joining the same call, please 
+    [contact us](https://dyte.io/contact).
+
+    We will support you with your requirements.
+
+- question: What is an organization in Dyte?
+  tags: ['General']
+  answer: |-
+    In Dyte, organization allows you to group all of your company's
+    members. This is a top-level entity to which all members of your group
+    are added. Dyte also considers the organization to be a billing unit.
+
+- question: Where can I find my auth token and room name?
+  tags: ['General']
+  answer: |-
+    The Add Participant API call returns your authentication token.
+
+    See [Add a participant](/api#/operations/addParticipant).
+
+    Room name is generated when you create a meeting. You can get the room
+    name from the developer portal or using REST APIs. For example,
+
+    ![Create Meeting response](/static/faq/create-meeting.png)
+
+    For more information, see [Create a meeting](/api#/operations/createMeeting).
+
+- question: Can I join a meeting from the mobile which is started on the web?
+  tags: ['General']
+  answer: |-
+    Yes, you can.
+
+#
+# Technical FAQs
+#
+
+- question: What is the difference between a meeting and a session?
+  tags: ['Technical']
+  answer: |-
+    Every Dyte communication channel is referred to as a meeting. A meeting is basically a recurring instance of that communication channel, and an ongoing meeting is referred to as a session.
+
+- question: Which part of the meeting is customizable?
+  tags: ['Technical']
+  answer: |-
+    To match your branding, you can change the logo, colors, font, border,
+    and spacing. Design tokens in UI Kit are used to customize these
+    components.
+
+    Our Core SDKs can also be used to create fully customized video/voice
+    calls for your applications.
+
+- question: Where is Dyte hosted?
+  tags: ['Technical']
+  answer: |-
+    Resiliency is important. Dyte uses multi-cloud and multi-region
+    architecture to provide that seamless experience. Dyte is hosted in
+    Mumbai, Virginia (US East), Singapore, and Frankfurt. You can also read
+    through [this](https://dyte.io/blog/multi-region-resiliency/) blog to understand how Dyte manages a multi-region setup.
+
+- question: Can I self-host Dyte on my own servers?
+  tags: ['Technical']
+  answer: No. Dyte is a Software as a Service (SaaS), fully managed and hosted by Dyte.
+
+- question: What platforms, language, and technologies can I build on using Dyte?
+  tags: ['Technical']
+  answer: |-
+    The following are the supported platforms:
+    - Web: React JS, Angular, Javascript
+    - Mobile: Flutter, Kotlin, Swift, React Native
+    - Desktop: Electron
+
+- question: What backend services can I use with Dyte?
+  tags: ['Technical']
+  answer: |-
+    We have no restrictions on our end. Our APIs are HTTP REST APIs and thus
+    can be called from services written in any language or framework. To
+    find your language-specific backend code, refer to our [API reference](/api)

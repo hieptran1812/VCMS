@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "vcms": "vcms-d5e48",
+    "default": "vcms-d5e48"
+  },
+  "targets": {},
+  "etags": {}
+}
