@@ -19,36 +19,152 @@ Lưu ý: Các bạn thay lại địa chỉ IP sao cho phù hợp. Do không có
 
 ![post_img](https://imgur.com/MFo4JVi.png)
 
+Ví dụ cho ảnh dưới
+
+![Imgur](https://imgur.com/7Y0vEYq.png)
+
 Output mẫu:
 
 ```
-
+{
+    "data": {
+        "infer_time": 0.2609739303588867,
+        "result": {
+            "frame_1": {
+                "blocks": [
+                    {
+                        "box": [
+                            4,
+                            1,
+                            523,
+                            1,
+                            523,
+                            22,
+                            4,
+                            22
+                        ],
+                        "text": "from sklearn model selection import train test split"
+                    },
+                    {
+                        "box": [
+                            1,
+                            21,
+                            483,
+                            21,
+                            483,
+                            46,
+                            1,
+                            46
+                        ],
+                        "text": "from sklearn preprocessing import LabelBinarizer"
+                    },
+                    {
+                        "box": [
+                            3,
+                            44,
+                            304,
+                            44,
+                            304,
+                            64,
+                            3,
+                            64
+                        ],
+                        "text": "from tensorflow .x import Input"
+                    },
+                    {
+                        "box": [
+                            3,
+                            66,
+                            363,
+                            66,
+                            363,
+                            87,
+                            3,
+                            87
+                        ],
+                        "text": "from tensorflow keras.x import mnist"
+                    },
+                    {
+                        "box": [
+                            1,
+                            87,
+                            365,
+                            87,
+                            365,
+                            110,
+                            1,
+                            110
+                        ],
+                        "text": "from tensorflow keras .x import Dense"
+                    },
+                    {
+                        "box": [
+                            2,
+                            109,
+                            362,
+                            109,
+                            362,
+                            131,
+                            2,
+                            131
+                        ],
+                        "text": "from tensorflow keras.x import Model"
+                    },
+                    {
+                        "box": [
+                            3,
+                            131,
+                            411,
+                            131,
+                            411,
+                            152,
+                            3,
+                            152
+                        ],
+                        "text": "from tensorflow keras.x import Sequential"
+                    }
+                ],
+                "final_result": "from sklearn model selection import train test split||from sklearn preprocessing import LabelBinarizer||from tensorflow .x import Input||from tensorflow keras.x import mnist||from tensorflow keras .x import Dense||from tensorflow keras.x import Model||from tensorflow keras.x import Sequential"
+            }
+        },
+        "type_data": "img"
+    },
+    "message": "Success",
+    "status": 200
+}
 ```
 
 Giải thích các thành phần:
 
+- data: Lưu thông tin các box
+- infer_time: Thời gian đưa ra dự đoán
+- box: Tọa độ bounding box của văn bản
+- text: Nội dung văn bản
+- final_result: Tổng hợp toàn bộ nội dung văn bản, cách nhau bởi dấu ||
+- message và status: Trạng thái của response
 
 ### Thực hiện OCR file ảnh với method GET, input là link ảnh
 
 ![get_img](https://imgur.com/PDrAwrt.png)
 
-Output mẫu:
-
-```
-
-```
-
-Giải thích các thành phần:
-
-
 ### Thực hiện kiểm duyệt nội dung video method GET, input là link video youtube
 
 ![get_vid](https://imgur.com/NP4xaSx.png)
 
+Input là url video: https://www.youtube.com/watch?v=rgcN6ZhhfEI
+
 Output mẫu:
 
 ```
-
+{"label": [], "result_ocr": {"info": {}, "final_result": ["tainan"], "time_inference": 11.719043016433716},
+"total_latency": 14.149246454238892}
 ```
 
 Giải thích các thành phần:
+
+- label: Các nội dung nhạy cảm có trong video (trừ nhãn normal)
+- result_ocr: Kết quả lọc từ ocr các từ ngữ nhạy cảm
+- info: Thông tin chi tiết (dùng để debug)
+- final_result: Từ ngữ nhạy cảm xuất hiện trong video có liên quan tới topic nào
+- tine_inference: Thời gian đưa ra dự đoán của module ocr
+- total_latency: Thời gian để đưa ra kết quả dự đoán cuối cùng

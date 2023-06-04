@@ -60,7 +60,7 @@ export default function ResourcesSection() {
             </Link>
             <Link
               className="underline underline-offset-8"
-              href="https://www.youtube.com/channel/UCUBSgG-Tk6w7Pe9loUR3yhw"
+              href="https://youtu.be/4GLwCpABdgg"
             >
               Videos
             </Link>

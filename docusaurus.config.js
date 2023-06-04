@@ -211,7 +211,7 @@ const config = {
           },
           {
             label: 'Watch demo',
-            href: 'https://dyte.io/schedule-demo',
+            href: 'https://youtu.be/4GLwCpABdgg',
             position: 'right',
             className: 'navbar-book-demo',
           },
