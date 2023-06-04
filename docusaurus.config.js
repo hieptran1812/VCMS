@@ -68,7 +68,7 @@ const docs = [
 /** @type {import('@docusaurus/plugin-content-docs').Options} */
 const defaultSettings = {
   breadcrumbs: false,
-  editUrl: 'https://github.com/dyte-in/docs/tree/main/',
+  editUrl: 'https://github.com/hieptran1812/VCMS',
   showLastUpdateTime: true,
   remarkPlugins: [math],
   rehypePlugins: [katex],
@@ -210,11 +210,7 @@ const config = {
             ],
           },
           {
-            type: 'search',
-            position: 'right',
-          },
-          {
-            label: 'Book a demo',
+            label: 'Watch demo',
             href: 'https://dyte.io/schedule-demo',
             position: 'right',
             className: 'navbar-book-demo',
@@ -248,40 +244,19 @@ const config = {
             ],
           },
           {
-            title: 'Company',
-            items: [
-              {
-                label: 'About Us',
-                href: 'https://dyte.io',
-              },
-              {
-                label: 'Join Us',
-                href: 'https://dyte.freshteam.com/jobs',
-              },
-              {
-                label: 'Privacy Policy',
-                href: 'https://dyte.io/privacy-policy',
-              },
-              {
-                label: 'Contact Us',
-                href: 'https://dyte.io/contact',
-              },
-            ],
-          },
-          {
             title: 'Resources',
             items: [
               {
                 label: 'Documentation',
-                href: '/',
+                href: '/features',
               },
               {
                 label: 'Blog',
-                href: 'https://dyte.io/blog',
+                href: '/tech-blog',
               },
               {
-                label: 'Community',
-                href: 'https://community.dyte.io',
+                label: 'Guides',
+                href: '/guides/introduction',
               },
             ],
           },

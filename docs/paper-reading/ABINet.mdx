@@ -1,0 +1,77 @@
+---
+sidebar_position: 3
+slug: ABINet
+title: Autonomous, Bidirectional and Iterative Language Modeling for Scene Text Recognition
+tags: [paper-reading]
+charset: 'UTF-8'
+---
+
+# Read Like Humans: Autonomous, Bidirectional and Iterative Language Modeling for Scene Text Recognition
+
+## Giới thiệu
+
+Bài báo đề xuất một hướng tiếp cận áp dụng language knowledge vào scene text recognition một cách hiệu quả có tên ABINet. Ba đặc điểm chính của ABINet là Autonomous, Bidirectional, và Iterative.
+
+1. Autonomous, cho phép lập mô hình ngôn ngữ rõ ràng bằng cách chặn gradient flow giữa visual model và language model
+2. Bidirectional, nghĩa là học biểu diễn văn bản bằng cách hoạt động trên bối cảnh của các ký tự trong các điều kiện chung hai chiều;
+3. Iterative, từng bước hiệu chỉnh dự đoán để giảm thiểu tác động của nhiễu đầu vào. Trên cơ sở đó, bài báo này đề xuất thêm một phương pháp self training tích hợp cho semi-supervised learning.
+   Kết quả thử nghiệm standard benchmark cho thấy tính ưu việt của phương pháp này, đặc biệt là trên các hình ảnh chất lượng thấp.
+
+## Phương pháp đề xuất
+
+Kiến trúc tổng quan của ABINet
+
+![image.png](https://images.viblo.asia/74459098-20dd-411d-9b43-696ee37b5564.png)
+
+### Vision Model
+
+![image.png](https://images.viblo.asia/5c58761d-190c-446f-922f-d99d372ad760.png)
+
+Vision model bao gồm một backbone network và một positional attention module. Feature extraction network và sequence modeling network là ResNet + Transformer. Với một ảnh $x$ ta có
+
+![image.png](https://images.viblo.asia/3eaf2dd4-7bad-477d-938c-c8a05fb0c213.png)
+
+trong đó $H$, $W$ là kích thước của ảnh $x$ và $C$ là feature dimension.
+
+Positional attention module dựa trên mô hình truy vấn, mô hình này chuyển đổi song song các visual feature thành xác suất ký tự:
+
+![image.png](https://images.viblo.asia/4bf8eeb6-6d4b-4e03-b5fb-16aaab34697d.png)
+
+Cụ thể, $\mathbf{Q} \in \mathbb{R}^{T \times C}$ là positional encodings của thứ tự các kí tự và $T$ là độ dài chuỗi kí tự $\mathbf{K}=\mathcal{G}\left(\mathbf{F}_b\right) \in \mathbb{R}^{\frac{H W}{16} \times C}$ , trong đó $\mathcal{G}(\cdot)$ được cài đặt bởi mini U-net. $\mathbf{V}=\mathcal{H}\left(\mathbf{F}_b\right) \in \mathbb{R}^{\frac{H W}{16} \times C}$ , trong đó $\mathcal{H}(\cdot)$ là identity mapping.
+
+### Language Model
+
+#### Chiến lược Autonomous
+
+Chiến lược Autonomous gồm những đặc điểm sau:
+LM được sử dụng như một spell correction model độc lập. Trong đó vector xác suất của kí tự là input và output là phân phối xác suất của các ký tự mong muốn
+Chặn training gradient flow tại input vector
+LM được đào tạo riêng biệt từ text data không được gán nhãn
+
+### Bidirectional Representation
+
+Các cách tiếp cận trước đây thường sử dụng mô hình tích hợp của hai mô hình một chiều, về cơ bản là các biểu diễn một chiều. So với biểu diễn hai chiều, biểu diễn một chiều về cơ bản nắm được 1/2 thông tin $H_y$, dẫn đến khả năng trích xuất đặc trưng bị hạn chế.
+
+BCN (Bidirectional Cloze Network) là một biến thể của L-layer transformer decoder. Mỗi layer của BCN là một chuỗi các multi-headed feed-forward networks, residual connections và layer normalization.
+Không như transformer thông thường, BCN lấy vị trí ký tự mã hóa theo thứ tự (character position ordinal encoding) làm đầu vào, là một vectơ xác suất không phải ký tự. Vector xác suất ký tự được truyền trực tiếp vào trong multi-head attention module. Ngoài ra, trong multi-head attention, diagonal attention mask được thiết kế để ngăn các kí tự “tự nhìn thấy chúng”. Ngoài ra, BCN không sử dụng self-attention để tránh rò rỉ thông tin qua các time step. Vì vậy, việc tính toán từng time step của BCN là độc lập và song song, đồng thời cũng có đặc điểm là hiệu quả cao.
+
+![image.png](https://images.viblo.asia/679ef74a-6cd3-42ed-ac0d-233fa5a5097a.png)
+
+Ma trận M là ma trận attention sử dụng để tránh việc nhận thông tin của ký tự hiện tại
+
+![image.png](https://images.viblo.asia/f1bf30cb-de8b-4632-81e5-a82dbf6ff800.png)
+
+Bằng cách chỉ định attention mask theo kiểu điền vào chỗ trống, BCN có thể tìm hiểu các biểu diễn hai chiều mạnh mẽ hơn so với tích hợp đặc tính một chiều. Nhờ kiến ​​trúc giống như transformer, các BCN có thể thực hiện các phép tính một cách độc lập và song song. Đồng thời, vì chỉ cần một nửa số lượng tính toán và tham số nên nó hiệu quả hơn so với mô hình tích hợp.
+
+#### Iterative Correction
+
+Dự đoán song song của transformer yêu cầu noise input, thường là giá trị gần đúng của visual prediction hoặc visual feature. Cụ thể, như trong Hình 2, trong biểu diễn hai chiều, điều kiện mong đợi của P ("O") là "SH-WING". Nhưng do môi trường bị mờ và bị che khuất, tình huống thực tế mà VM thu được là "SH-VING", trong đó "V" trở thành nhiễu, điều này làm giảm độ tin cậy của dự đoán. Nó có xu hướng không thân thiện hơn với LM, với các dự đoán sai trong VM ngày càng tăng.
+Để giải quyết vấn đề noise input, bài báo đề xuất một iterative LM. LM lặp lại M lần, thực hiện các phân bổ khác nhau cho y. Với lần lặp đầu tiên, mục tiêu của LM là sửa output của VM. Đối với các lần lặp tiếp theo, mục tiêu của bản sửa lỗi là kết quả của vòng ABINet trước đó. Bằng cách này, LM có thể lặp đi lặp lại các dự đoán trực quan chính xác.
+
+#### Semi-supervised Ensemble Self-training
+
+Nhóm tác giả đề xuất phương pháp học bán giám sát dựa trên việc tự đào tạo và tích hợp dự đoán lặp đi lặp lại. Ý tưởng cơ bản của việc tự đào tạo là tạo nhãn giả từ chính mô hình, sau đó đào tạo lại mô hình với các nhãn giả bổ sung. Vì vậy, vấn đề mấu chốt là phải xây dựng các nhãn giả chất lượng cao. Để lọc ra các nhãn giả gây nhiễu, bài báo đề xuất phương pháp sau: 1) Chọn độ tin cậy tối thiểu của các ký tự trong thể hiện văn bản làm yếu tố xác định của văn bản. 2) Suy nghĩ về dự đoán lặp đi lặp lại của từng ký tự như một cách tổng thể để loại bỏ các tác động của nhãn nhiễu.
+
+## Tài liệu tham khảo
+
+[1] [Read Like Humans: Autonomous, Bidirectional and Iterative Language Modeling for Scene Text Recognition](https://arxiv.org/pdf/2103.06495.pdf)

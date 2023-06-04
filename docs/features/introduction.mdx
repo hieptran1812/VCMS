@@ -4,69 +4,33 @@ slug: /
 image: /static/ui-kit/1.x.x/ui-kit-cover.jpg
 ---
 
-# Introduction to Vanilla JS UI Kit
+# Các chức năng của sản phẩm
 
-Dyte's UI Kit is a prebuilt design library of UI components that makes it easy
-to integrate video and voice calls into any app or website within minutes.
+## Context
 
-To learn more about web components, see
-[Web Components Overview](https://www.webcomponents.org/introduction).
+Việc kiểm duyệt nội dung trong video là một bước quan trọng trong quá trình sản xuất và xuất bản video. Vai trò của việc này là đảm bảo rằng nội dung của video tuân thủ các quy định pháp luật và đạo đức xã hội.
 
-## The Anatomy of UI Kit
+Việc kiểm duyệt nội dung trong video có vai trò quan trọng đối với cả người dùng và các nhà quảng cáo.
 
-The UI Kit is a design library of prebuilt UI components built on top of the
-core SDKs. Core SDK handles all the low-level media and network handling parts
-of a meeting and exposes simpler APIs to use. You can create a meeting object
-using the web-core components and pass it to the UI Kit components.
+Đối với người dùng, việc kiểm duyệt nội dung trong video giúp đảm bảo rằng họ sẽ không bị tiếp xúc với những nội dung không phù hợp hoặc có hại đến sức khỏe tinh thần của họ. Điều này đặc biệt quan trọng đối với các đối tượng nhạy cảm như trẻ em hoặc những người dễ bị ảnh hưởng bởi những nội dung tiêu cực. Nếu nội dung video không được kiểm duyệt kỹ càng, người dùng có thể phải đối mặt với các nội dung không phù hợp hoặc có hại, gây ra những hậu quả tiêu cực đến sức khỏe tinh thần của họ.
 
-- Uses a layered design structure, allowing you to start with one prebuilt
-  component and slowly add further layers as the needs evolve.
+Đối với các nhà quảng cáo, việc kiểm duyệt nội dung trong video giúp đảm bảo rằng quảng cáo sẽ được đưa ra trước đúng đối tượng mà họ muốn nhắm đến, tránh lãng phí chi phí quảng cáo và tăng tỷ lệ chuyển đổi. Nếu nội dung video không được kiểm duyệt kỹ càng, các nhà quảng cáo có thể đưa ra quảng cáo trước những nội dung không phù hợp hoặc có hại, gây ra sự phản đối hoặc khó chịu từ phía người dùng, ảnh hưởng đến hiệu quả quảng cáo của họ.
 
-## How to Use UI Kit?
+Cụ thể, việc kiểm duyệt nội dung trong video có thể giúp:
 
-Dyte's UI Kit offers a couple of ways to get started with your live video and
-voice calling applications.
+- Đảm bảo tính xác thực của thông tin: Kiểm duyệt nội dung giúp đảm bảo rằng thông tin được truyền tải trong video là chính xác và không bị sai lệch hoặc lạm dụng.
 
-- **Use prebuilt components**: You can use prebuilt `dyte-meeting` component to
-  create your meeting quickly. With this component, you don't have to handle all
-  the states, dialogs, and other aspects of managing the application. This loads
-  your preset and renders the UI based on it. For more information, see
-- **Build your own UI**: Dyte also offers the flexibility to build your own UI
-  using various individual components. This offers limitless customization
-  options, ranging from colors and font to spacing, participant tiles, screen
-  share views, logo, height, width and more, you can tailor the UI to fit your
-  exact needs. See Build you own UI section.
+- Bảo vệ quyền riêng tư và danh dự: Việc kiểm duyệt nội dung trong video giúp ngăn chặn việc phát tán thông tin cá nhân hoặc vi phạm danh dự của cá nhân hoặc tổ chức.
 
-## Supported Browser
+- Ngăn chặn nội dung bạo lực và không đạo đức: Kiểm duyệt nội dung giúp loại bỏ các đoạn video có chứa nội dung bạo lực, đồi trụy, khiêu dâm hay phân biệt chủng tộc, chủng tộc và giới tính, giúp bảo vệ tinh thần và sức khỏe của người xem.
 
-Here are the browser requirements:
+- Tuân thủ các quy định pháp luật: Việc kiểm duyệt nội dung giúp đảm bảo rằng video tuân thủ các quy định pháp luật về bản quyền, quyền sở hữu trí tuệ và các quy định khác liên quan đến sản xuất và phát sóng video.
 
-- Chrome (or Chromium based) 74+
-- Firefox 78+
-- Opera 64+
-- Safari 12+
-- Edge 79+
-- iOS (Safari) 12.1+
-- iOS (Non-Safari) 15+
+- Đảm bảo chất lượng sản phẩm: Kiểm duyệt nội dung giúp đảm bảo chất lượng của sản phẩm, giúp nâng cao trải nghiệm người xem và tăng tính chuyên nghiệp của đội ngũ sản xuất video.
 
-## SDK Size
+## Chức năng chính
 
-The entire UI has a small <500KB bundle size. If you use individual components,
-the size will be even smaller.
+VCMS được xây dựng để giải quyết những vấn đề trên, bằng cách cung cấp các API kiểm duyệt nội dung video và hình ảnh, cụ thể như sau:
+- Kiểm duyệt nội dung video, hỗ trợ nhận diện các video có nội dung nhạy cảm liên quan tới chiến tranh, tai nạn, thiên tai, cờ bạc. Nhận diện các văn bản, từ ngữ xuất hiện trong video, từ đó người dùng có thể lọc ra những từ ngữ không phù hợp theo mục đích sử dụng của mình
+- Hỗ trợ nhận diện văn bản, từ trong hình ảnh
 
-## Features
-
-- Dyte UI Kit is built using
-  [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
-  that make use of
-  [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM).
-  This isolates the styling of each component, and the CSS on your page does not
-  interfere with component styling.
-- Each component uses design tokens in conjunction with CSS variables for
-  styling. This makes the customization super simple and easy. Other than the
-  design tokens, we've also attempted to improve the customization options, with
-  features like Internationalisation (i18n) and Icon Packs Support.
-- In addition, we've also focused on accessibility (a11y) so that users can
-  easily navigate through the UI without having to move their mouse across the
-  screen. For example, closing dialogues with the `Escape` key and navigating
-  through visual elements with the `Tab` key.
