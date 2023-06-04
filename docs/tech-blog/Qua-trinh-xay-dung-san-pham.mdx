@@ -6,18 +6,47 @@ image: /static/ui-kit/1.x.x/ui-kit-cover.jpg
 
 # Quá trình xây dựng sản phẩm
 
-## Xây dựng plan cho sản phẩm
+## Ý tưởng ban đầu
+
+Ý tưởng ban đầu rất đơn giản khi gần đây mình lướt tiktok có khá nhiều video toxic, trong đầu mình nảy lên một ý tưởng là lọc những video này đi.
+Mặc dù đây là module nhỏ đã được tích hợp vào những sản phẩm cổng nghệ lớn như Facebook, Tiktok,... nhưng mình muốn mô phỏng và "có thể" sẽ cải thiện phần nào thông qua sản phẩm VCMS này.
 
 ## Coding and Fix Bug
 
-## Một số phần muốn cải thiện
+Đây là phần mất rất nhiều thời gian trong quá trình xây dựng sản phẩm.
+Bên cạnh coding từ đầu một số phần model, để tiết kiệm thời gian mình cũng tận dụng một số thư viện hỗ trợ build model OCR (text recognition) như MMOCR.
+Tuy nhiên có nhiều case khá khoai phải code như sắp xếp lại các box theo đúng thứ tự và đúng phần nội dung trong ảnh.
+Ví dụ như ảnh này
 
-### Deploy Backend
+![img](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-021-00857-8/MediaObjects/41598_2021_857_Fig1_HTML.png)
+
+Nếu sử dụng model predict thông thường thì kết quả thu được sẽ là text từ trái sang phải, từ trên xuống dưới và nó sẽ không đúng với trường hợp văn bản tổ chức thành từng ô như này.
+Do đó, bên cạnh dùng DBNet thì mình cũng phải dùng thêm cả YoloV5 để correct lại.
+
+## Một số phần cần cải thiện
+
+Mặc dù đã "hòm hòm" một số chức năng chính như mong muốn nhưng sản phẩm có thể cải thiện và làm tốt nhiều hơn nữa.
 
 ### Convert model sang ONNX hoặc TensorRT
 
-### Sử dụng thêm các model khác
+Convert model sang ONNX hoặc TensorRT có thể tăng tốc độ inference khá đáng kể.
+Tuy nhiên do việc fix bug chiếm khá nhiều thời gian nên chưa thực hiện được phần này.
+
+### Deploy Backend
+
+Do tài nguyên hạn chế và không thể dùng các nền tảng free nên việc deploy phần backend chưa được thực hiện.
+Google cloud platform có free 300 USD sử dụng đầu tiên nhưng mình đã dùng nó hết trước đây :(
+Việc sử dụng K8S trên các dịch vụ cloud để deploy có thể đáp ứng được vấn đề scale của sản phẩm.
+Ngoài ra, để tối ưu việc triển khai sản phẩm AI, ta có thể serving model sử dụng Triton.
+Nhưng do model chưa chuyển sang định dạng ONNX hoặc TensorRT nên cũng chưa thực hiện được phần này.
+
+### Cải thiện độ chính xác và tăng tốc độ inference
+
+Do tài nguyên GPU còn hạn chế nên việc training gặp khá nhiều khó khăn.
+Vì không được thực nghiệm trên nhiều model và chiến lược training khác nhau nên kết quả vẫn còn khá khiêm tốn và cần được cải thiện thêm.
+Với model nhận diện nội dung video (bản chất là bài toán image classification) có thể thay thế bằng dùng các model cho bài toán video classification.
+Vì mem GPU và data video hạn chế nên chưa thể thực nghiệm cách làm này.
 
 ### Xây dựng pipeline training tự động, CI/CD
 
-## Tâm sự
+Do các model được training trên nguồn data crawl hạn chế nên cần liên tục cải thiện bằng cách bổ sung dữ liệu và tạo một pipeline training tự động để tiết kiệm thời gian và công sức config.

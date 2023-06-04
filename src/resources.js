@@ -16,7 +16,7 @@ const RESOURCES = [
     duration: '10 min',
   },
   {
-    url: 'https://www.youtube.com/watch?v=eVUqkNNHh1o',
+    url: 'https://www.youtube.com/',
     type: 'Video',
     title: 'Checkout my demo',
     description: 'In this video we conduct a demo about this production.',

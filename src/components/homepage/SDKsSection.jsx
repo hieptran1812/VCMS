@@ -110,13 +110,6 @@ export default function SDKsSection() {
               The system helps detect images with signs of sensitive content
               such as wars, accidents, blood, natural disasters,...
             </p>
-            <div>
-              <ul className="mb-0 flex list-none flex-col gap-2 pl-0">
-                <li>
-                  <SDKLink href="features" Icon={ReactIcon} label="React" />
-                </li>
-              </ul>
-            </div>
           </div>
           <div className="flex-1 rounded-b-3xl bg-secondary-800 p-6 px-8 lg:rounded-r-3xl lg:rounded-bl-none">
             <h4>Recognize text in video</h4>
@@ -124,11 +117,6 @@ export default function SDKsSection() {
               Identify the text that appears in the video to filter out
               inappropriate words.
             </p>
-            <ul className="mb-0 flex list-none flex-col gap-2 pl-0">
-              <li>
-                <SDKLink href="features" Icon={JSIcon} label="JavaScript" />
-              </li>
-            </ul>
           </div>
         </div>
         <div
